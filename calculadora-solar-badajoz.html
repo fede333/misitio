@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Solar para Badajoz</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .calculadora {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 24px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultado {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculadora">
+        <h1>Calculadora Solar para Badajoz</h1>
+        <div class="input-group">
+            <label for="fecha">Selecciona una fecha:</label>
+            <input type="date" id="fecha">
+        </div>
+        <button onclick="calcularHorarioSolar()">Calcular</button>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        function calcularHorarioSolar() {
+            const fecha = new Date(document.getElementById('fecha').value);
+            
+            if (isNaN(fecha.getTime())) {
+                document.getElementById('resultado').innerHTML = 'Por favor, selecciona una fecha válida.';
+                return;
+            }
+            
+            // Coordenadas de Badajoz
+            const latitud = 38.8794;
+            const longitud = -6.9706;
+            
+            const horariosSolares = SunCalc.getTimes(fecha, latitud, longitud);
+            
+            const salidaSol = horariosSolares.sunrise.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            const puestaSol = horariosSolares.sunset.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            
+            const horasSol = (horariosSolares.sunset - horariosSolares.sunrise) / (1000 * 60 * 60);
+            
+            const resultado = `
+                <p><strong>Salida del sol:</strong> ${salidaSol}</p>
+                <p><strong>Puesta del sol:</strong> ${puestaSol}</p>
+                <p><strong>Horas de sol:</strong> ${horasSol.toFixed(2)} horas</p>
+            `;
+            
+            document.getElementById('resultado').innerHTML = resultado;
+        }
+    </script>
+</body>
+</html>
